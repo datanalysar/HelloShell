@@ -1,6 +1,6 @@
 {
 	"name"       : "helloshell",
-	"version"    : "1.0.0",
+	"version"    : "0.0.1",
 	"author"     : "wl879",
 	"description": "Private script management tools",
 	"keywords"   : ["shell"],

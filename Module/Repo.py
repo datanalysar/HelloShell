@@ -152,7 +152,10 @@ def run(argv):
 	}, argv, True, True)
 	
 	if len(argv) == 0:
-		list_repo()
+		if File.isdir(_dir):
+			list_repo()
+		else:
+			print(args.help())
 		exit(0)
 
 	if args.get("dir"):

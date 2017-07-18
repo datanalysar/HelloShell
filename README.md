@@ -40,7 +40,8 @@ $ npm install helloshell -g
 
 ```shell
 $ git clone https://github.com/wl879/HelloShell.git
-$ ln -s ./main.py /use/local/bin
+$ chmod 777 ./HelloShell/main.py
+$ ln -s "$(pwd)/HelloShell/main.py" /usr/local/bin/helloshell
 ```
 
 

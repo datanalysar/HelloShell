@@ -7,13 +7,12 @@ from Module import File
 _file_ = File.realpath(__file__)
 _dir_  = File.dirname(_file_)
 _conf_ = File.join(_dir_, "config.ini")
-_bin_  = File.islink(__file__) and File.dirname(__file__) or "/use/bin"
+_bin_  = File.islink(__file__) and File.dirname(__file__) or "/usr/local/bin"
 _help_ = """
-Hello Shell 脚本管理框架
-
-usage: helloshell $[<command>] [args]
-
-commands:
+$[Hello Shell] 个人脚本管理
+--------------------------------------------------------------
+  usage   : helloshell $[<command>] [args]
+  commands:
     $[new]                      新建脚本
     $[repo]                     配置仓库
     $[back]                     恢复仓库

@@ -67,12 +67,6 @@ def to_bin(file, alias):
 
 	if alias:
 		to = File.join(__main__._bin_, alias)
-		
-		# if type(file) == unicode:
-		# 	file = file.encode("utf-8")
-		# if type(to) == unicode:
-		# 	to = to.encode("utf-8")
-
 		if File.exists(to):
 			if Echo.input('"@['+to+']" 以存在，是否替换 (y/n): ').lower() != "y":
 				exit(0)
@@ -91,6 +85,19 @@ def ls_bin():
 			res[os.readlink(sub)] = sub
 	return res
 
+def clear_bin():
+	# print("?????")
+	import __main__
+	bin_dir = __main__._bin_
+	res     = {}
+	for sub in File.ls(bin_dir):
+		if File.islink(sub):
+			f = os.readlink(sub)
+			if f and not File.isabspath(f):
+				f = File.normpath( File.join(bin_dir, f) )
+			if not f or not File.exists(f):
+				if Echo.input("![将要删除] @["+sub+"] -> !["+f+"] (y/n): ").lower() == "y":
+					os.remove(sub)
 
 def choice():
 	res     = []
@@ -124,12 +131,17 @@ def run(argv):
 	args = Args.parse({
 		"desc": " 安装仓库中的脚本到系统环境变量中\n usage: helloshel link <script> [linkname]",
 		"options": [
-			["-l", "--list",   None,           "查看仓库内脚本"]
+			["-l", "--list",   None,           "查看仓库内脚本"],
+			["-c", "--clear", None, "清理失效链接"]
 		]
 	}, argv, True, True)
 
 	if args.get("list"):
 		Repo.list_repo()
+		exit(0)
+
+	if args.get("clear"):
+		clear_bin()
 		exit(0)
 
 	if args.get("-"):

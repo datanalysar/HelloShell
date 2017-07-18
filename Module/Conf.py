@@ -16,7 +16,7 @@ def repo_dir():
 	path = conf.value("repo")
 	if not path:
 		conf.value("repo", File.join(__main__._dir_, "repo"))
-	elif not re.match(r"^([\~\/]|\d:)", path):
+	elif not File.isabspath(path):
 		conf.value("repo", File.normpath(File.join(__main__._dir_, path)))
 	return conf.value("repo")
 

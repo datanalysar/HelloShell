@@ -12,6 +12,10 @@ def issubpath(parent, sub):
 			return False
 	return True
 
+def isabspath(path):
+	if path[0] == "/" or path[0] == "~":
+		return True
+
 def read(file):
 	if isfile(file):
 		f = codecs.open(file, 'r', 'utf-8' )
