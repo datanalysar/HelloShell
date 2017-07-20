@@ -6,12 +6,12 @@ import OS
 
 class Conf():
 
-	def __init__(self, filename):
-		self.filename = filename
-		if not OS.isfile(filename):
-			OS.write(filename, "")
+	def __init__(self, file):
+		self.file = file
+		if not OS.isfile(file):
+			OS.write(file, "")
 		cp = ConfigParser.ConfigParser()
-		cp.read(filename)
+		cp.read(file)
 		if not cp.has_section("def"):
 			cp.add_section("def")
 		if not cp.has_section("user"):
@@ -46,13 +46,15 @@ class Conf():
 		return res
 
 	def save(self):
-		self.config_parser.write(open(self.filename, "w"))
+		self.config_parser.write(open(self.file, "w"))
 
 	@staticmethod
 	def read(file = None, create = False):
-		if file == None:
-			import __main__
+		import __main__
+		if file == None or file == __main__.__file__:
 			file = OS.filename(OS.realpath(__main__.__file__)) + ".ini"
+		else:
+			file = OS.realpath(file)
 		if create == False:
 			if not OS.isfile(file):
 				return None

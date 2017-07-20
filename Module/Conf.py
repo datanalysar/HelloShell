@@ -48,8 +48,6 @@ def run(argv):
 	conf_file = OS.filename(OS.realpath(args.get("file"))) + ".ini"
 	pref      = args.get("prefix") + "_" if args.get("prefix") else ""
 
-	
-
 	if args.get("options"):
 		option = []
 		for arg in args.get("options"):

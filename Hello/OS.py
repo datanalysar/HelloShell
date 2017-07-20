@@ -1,12 +1,14 @@
 #!/usr/bin/python
 #coding:utf-8
 
-import codecs, os
+import codecs, os, commands
 from os.path import *
 
 __join = os.path.join
 
 system = os.system
+cd     = os.chdir
+pwd    = os.getcwd
 
 def issubpath(parent, sub):
 	parent = normpath(parent).split("/")
@@ -46,7 +48,7 @@ def remove(path):
 
 def ls(target, level = 0, _abs = True):
 	res = []
-	for sub in (bash("ls "+target, "2>/dev/null") or "").split("\n"):
+	for sub in (popen("ls "+target, "2>/dev/null") or "").split("\n"):
 		if not sub or sub[0] == ".":
 			continue
 		abs_sub = join(target, sub)
@@ -78,6 +80,9 @@ def extname(path):
 		return ref[1]
 	return ""
 
-def bash(*cmd):
+def popen(*cmd):
 	output = os.popen( " ".join(cmd) )
 	return output.read()
+
+def cmd(*cmd):
+	return commands.getstatusoutput(" ".join(cmd)+" 2>/dev/null")

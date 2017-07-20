@@ -166,6 +166,27 @@ $ test.sh -t "haha"
 haha
 ```
 
+**HELP DOCUMENT** 格式说明
+
+```
+# HELP DOCUMENT
+# 
+# 此处可以写脚本介绍
+#
+# 参数格式:
+#	-t, --text content		此表示 text 接收参数 
+#	-t, --text <content>	此表示 text 接收参数, 当无参数时报错
+#	-t, --text [content]	此表示 text 接收参数，当无参数时为 true
+#	-t, --text = content	此表示 text 接收参数，默认值为 abc
+#	-t, --text = []	    	此表示 text 接收多个参数，保存为数组类型
+#	-t, --text = [desc]	    此表示 text 接收多个参数，保存为数组类型，desc 为补充说明
+#	-h, --help				此表示 help 为 bool 类型，不接收参数
+
+
+```
+
+
+
 
 
 #### 6. 彩色输出

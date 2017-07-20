@@ -19,7 +19,7 @@ bash_tmp = """
 
 # 读取参数
 eval "$(helloshell args $0 $*)"
-if [ $? != 0 ]; then
+if [ -n "$argv_errors" ]; then
 	echo "Argument Error:"
 	echo $argv_errors
 	exit 1

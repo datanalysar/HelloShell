@@ -36,7 +36,7 @@ class Args():
 		shot = shot and shot[1:]
 		long = long and long[2:]
 		if value:
-			res  = re.match(r"^\= *(\w+$|\[ *\])", value)
+			res  = re.match(r"^\= *(\w+$|\[)", value)
 			if res:
 				val  = res.group(1)
 				if val[0] == "[":
@@ -74,9 +74,9 @@ class Args():
 				tag = "-"
 				typ = list
 				for opt in self._define:
-					tag = opt.get("tag")
+					tag = opt["tag"]
 					if tag and tag not in pass_tags:
-						typ = type(opt.get("default"))
+						typ = type(opt["default"])
 						pass_tags.append(tag)
 						break
 					else:
@@ -86,7 +86,7 @@ class Args():
 					while i+1 < len(argv) and argv[i+1][0] != "-":
 						i += 1
 						val.append(argv[i])
-				self.__set_options(tag, val, typ)
+				self.__set_options(tag, val, typ, opt["value"])
 			i += 1
 		return self
 
@@ -163,15 +163,13 @@ class Args():
 					val    = argv[index+1]
 					index += 1
 			else:
-				val = opt["default"] != None and opt["default"] or ""
+				val = opt["default"]
 		else:
 			val = True
-
-		if val != None:
-			self.__set_options(opt["long"] or opt["shot"], val, typ)
+		self.__set_options(opt["long"] or opt["shot"], val, typ, opt["value"])
 		return index
 
-	def __set_options(self, key, value, typ):
+	def __set_options(self, key, value, typ, define=None):
 		if typ == list:
 			temp = self.options.get(key)
 			if temp:
@@ -185,6 +183,14 @@ class Args():
 				temp = value if type(value) == list else [value] 
 			self.options[key] = temp
 		else:
+			if value == None and define:
+				if define[0] == "[":
+					value = True
+				elif define[0] == "<":
+					self.errors.append('Option  "'+key+'" is missing parameters')
+					return
+				else:
+					value = ""
 			self.options[key] = value
 
 	@staticmethod
