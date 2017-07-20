@@ -2,41 +2,42 @@
 #coding:utf-8
 
 import os, re, sys, commands, time
-import File, Git, Conf
+import Git, Conf
 from Echo import Echo
 from Args import Args
+from Hello import OS
  
 _dir = Conf.repo_dir()
 
 def find_main(path, scan=True, select=False):
-	if File.islink(path):
-		path = File.realpath(path)
+	if OS.islink(path):
+		path = OS.realpath(path)
 	
-	if File.isfile(path):
+	if OS.isfile(path):
 		return path
-	if File.isdir(path):
-		name = File.filename(path, True)
-		for sub in File.ls_name(path):
-			subname = File.filename(sub)
+	if OS.isdir(path):
+		name = OS.filename(path, True)
+		for sub in OS.ls(path, _abs=False):
+			subname = OS.filename(sub)
 			if subname == name or subname == "main" or subname == "index":
 				return sub
 
-	for sub in File.ls(_dir):
-		if path == File.basename(sub):
+	for sub in OS.ls(_dir):
+		if path == OS.basename(sub):
 			ref = find_main(sub, scan = False)
 			if ref:
 				return ref
 			if select:
-				return Echo.select(File.ls(sub), "请选择: ")
+				return Echo.select(OS.ls(sub), "请选择: ")
 
 def set_repo(target):
-	new_dir  = File.abspath(target)
-	if not File.isdir(new_dir):
+	new_dir  = OS.abspath(target)
+	if not OS.isdir(new_dir):
 		if Echo.input('目录 "@['+new_dir+']" 不存在，是否创建 (y/n) %s: ').lower() != 'y':
 			exit(0)
 		os.makedirs(new_dir)
 
-	if _dir != new_dir and File.isdir(_dir):
+	if _dir != new_dir and OS.isdir(_dir):
 		if Echo.input('⚠️ 是否迁移旧仓库 "@['+_dir+']" 到新目录 (y/n): ').lower() == 'y':
 			os.system("mv -f " + _dir + "/* " + new_dir)
 	Conf.default().value("repo", new_dir)
@@ -71,7 +72,7 @@ def remote_repo(target):
 def get_status(file, _status = None):
 	_status = _status or Git.new(_dir).status()[2]
 	for item in _status:
-		if file == item["file"] or File.issubpath(file, item["file"]):
+		if file == item["file"] or OS.issubpath(file, item["file"]):
 			return item["state"]
 
 def ls_repo():
@@ -80,9 +81,9 @@ def ls_repo():
 	git_status = git.status()[2] or []
 	bin_map    = Link.ls_bin()
 	res = []
-	for sub in File.ls(_dir):
+	for sub in OS.ls(_dir):
 		state = get_status(sub, git_status) or ""
-		if File.isdir(sub):
+		if OS.isdir(sub):
 			ref = Link.search_link(sub)
 			if ref:
 				for item in ref:
@@ -91,7 +92,7 @@ def ls_repo():
 			else:
 				main = find_main(sub)
 				if main:
-					sub  = File.join(sub, main)
+					sub  = OS.join(sub, main)
 					state = get_status(sub, git_status) or state
 		res.append( {"state": state, "file": sub, "link": bin_map.get(sub)} )
 	return res
@@ -104,7 +105,7 @@ def list_repo():
 	Echo.echo( 'Scripts:' )
 	for item in ls_repo():
 		state = item["state"]
-		name  = File.relpath( item["file"], _dir)
+		name  = OS.relpath( item["file"], _dir)
 		link  = item["link"]
 		text = '  [!['+state+']]'+(' '*(2-len(state)))+' @['+name+']'
 		if link:
@@ -152,7 +153,7 @@ def run(argv):
 	}, argv, True, True)
 	
 	if len(argv) == 0:
-		if File.isdir(_dir):
+		if OS.isdir(_dir):
 			list_repo()
 		else:
 			print(args.help())

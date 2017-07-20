@@ -1,9 +1,10 @@
 #!/usr/bin/python
 #coding:utf-8
 
-import File, Link, Conf
+import Link, Conf
 from Echo import Echo
 from Args import Args
+from Hello import OS
 
 bash_tmp = """
 #!/bin/sh
@@ -54,6 +55,7 @@ sys.path.append("#_dir_#")
 import Hello.Args
 import Hello.Conf
 import Hello.Echo
+import Hello.OS
 
 # HELP DOCUMENT
 #
@@ -66,13 +68,7 @@ if __name__ == '__main__':
 
 	# 示例:
 
-	args = Hello.Args.parse(__file__, sys.argv[1:])
-	if args.get("help"):
-		print( args.help() )
-		exit(0)
-	if args.errors:
-		print(args.errors)
-		exit(1)
+	args = Hello.Args.parse(__file__, sys.argv[1:], True, True)
 	print(args.options)
 
 	conf = Hello.Conf.read(create=True)
@@ -102,24 +98,24 @@ def run(argv):
 
 	if basename:
 		import __main__
-		file_name = File.filename(basename)
-		ext_name  = File.extname(basename)
-		path      = File.join(repo_path, file_name, basename)
+		file_name = OS.filename(basename)
+		ext_name  = OS.extname(basename)
+		path      = OS.join(repo_path, file_name, basename)
 
-		if File.isfile(path):
+		if OS.isfile(path):
 			if Echo.input('⚠️ "@['+path+']" 以存在，是否覆盖 (y/n): ').lower() != "y":
 				exit(0)
 		elif Echo.input('创建 "@['+path+']" (y/n): ').lower() != "y":
 			exit(0)
 
 		if not ext_name or ext_name == ".sh" or ext_name == ".bash":
-			File.write(path, bash_tmp, 0o777)
+			OS.write(path, bash_tmp, 0o777)
 
 		elif ext_name == ".py":
-			File.write(path, python_tmp.replace("#_dir_#", __main__._dir_), 0o777)
+			OS.write(path, python_tmp.replace("#_dir_#", __main__._dir_), 0o777)
 		
 		else:
-			File.write(path, "", 0o777)
+			OS.write(path, "", 0o777)
 
 		alias = args.get("link")
 		if alias != None:

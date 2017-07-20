@@ -2,10 +2,10 @@
 #coding=utf-8
 
 from Hello import Args
-import File
+from Hello import OS
 
 def run(argv):
-	args = File.isfile(argv[0]) and Args.parse(argv[0], argv[1:]) or Args.parse(argv)
+	args = OS.isfile(argv[0]) and Args.parse(argv[0], argv[1:]) or Args.parse(argv)
 	sh   = ""
 	for k in args.options:
 		val = args.options[k]

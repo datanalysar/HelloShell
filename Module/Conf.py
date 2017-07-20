@@ -2,9 +2,9 @@
 #coding:utf-8
 
 import re
-import File
 from Args import Args
 from Echo import Echo
+from Hello import OS
 from Hello import Conf
 
 
@@ -15,9 +15,9 @@ def repo_dir():
 	conf = default()
 	path = conf.value("repo")
 	if not path:
-		conf.value("repo", File.join(__main__._dir_, "repo"))
-	elif not File.isabspath(path):
-		conf.value("repo", File.normpath(File.join(__main__._dir_, path)))
+		conf.value("repo", OS.join(__main__._dir_, "repo"))
+	elif not OS.isabspath(path):
+		conf.value("repo", OS.join(__main__._dir_, path))
 	return conf.value("repo")
 
 def default():
@@ -45,7 +45,7 @@ def run(argv):
 		Echo.echo(args.help())
 		exit(1)
 
-	conf_file = File.filename(File.realpath(args.get("file"))) + ".ini"
+	conf_file = OS.filename(OS.realpath(args.get("file"))) + ".ini"
 	pref      = args.get("prefix") + "_" if args.get("prefix") else ""
 
 	

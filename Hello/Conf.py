@@ -2,14 +2,14 @@
 #coding:utf-8
 
 import ConfigParser, re
-from Module import File
+import OS
 
 class Conf():
 
 	def __init__(self, filename):
 		self.filename = filename
-		if not File.isfile(filename):
-			File.write(filename, "")
+		if not OS.isfile(filename):
+			OS.write(filename, "")
 		cp = ConfigParser.ConfigParser()
 		cp.read(filename)
 		if not cp.has_section("def"):
@@ -52,8 +52,8 @@ class Conf():
 	def read(file = None, create = False):
 		if file == None:
 			import __main__
-			file = File.filename(File.realpath(__main__.__file__)) + ".ini"
+			file = OS.filename(OS.realpath(__main__.__file__)) + ".ini"
 		if create == False:
-			if not File.isfile(file):
+			if not OS.isfile(file):
 				return None
 		return Conf(file)

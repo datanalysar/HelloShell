@@ -2,10 +2,9 @@
 #coding=utf-8
 
 import re
-from Module import File
+import OS
 
 class Args():
-	
 	_define    = []
 	_help       = ""
 
@@ -40,7 +39,7 @@ class Args():
 			res  = re.match(r"^\= *(\w+$|\[ *\])", value)
 			if res:
 				val  = res.group(1)
-				if val == "[]":
+				if val[0] == "[":
 					deft = []
 				elif val == "false":
 					deft = False
@@ -192,7 +191,7 @@ class Args():
 	def parse(option, argv = None, watch_help = False, check_error=False):
 		typ = type(option)
 		if typ is str or typ is unicode:
-			args = File.isfile(option) and read_file(option) or read_help(option)
+			args = OS.isfile(option) and read_file(option) or read_help(option)
 		
 		elif typ == dict:
 			args             = Args()
@@ -223,7 +222,7 @@ class Args():
 		return args
 
 def read_file(file):
-	code = File.read(file)
+	code = OS.read(file)
 	if code:
 		res = re.search(r"#\s+HELP DOCUMENT\s*((?:[ \t]*#[^\n]*\n)+)", code)
 		if res:

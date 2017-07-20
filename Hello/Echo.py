@@ -3,16 +3,24 @@
 
 import re, sys
 
+# 	black='\033[30m' red='\033[31m' green='\033[32m' orange='\033[33m'
+# 	blue='\033[34m' purple='\033[35m' cyan='\033[36m' lightgrey='\033[37m'
+#  	darkgrey='\033[90m' lightred='\033[91m' lightgreen='\033[92m' yellow='\033[93m'
+# 	lightcyan='\033[94m' pink='\033[95m' lightblue='\033[96m'
+
 def color(text):
-	patt = re.compile(r"#([rgbcdw])\[|(?!\\)(\]|\[)|([!@#$^])\[")
 	color_map = {
 		"r": "\033[91m", "!": "\033[91m",
 		"g": "\033[92m", "$": "\033[92m",
 		"b": "\033[34m", "^": "\033[34m",
 		"c": "\033[36m", "@": "\033[96m",
 		"d": "\033[90m", "#": "\033[90m",
-		"w": "\033[37m", "~": "\033[37m"
+		"w": "\033[37m", "~": "\033[37m",
+		"y": "\033[93m", 
+		"p": "\033[95m"
 	}
+	patt = re.compile(r"#([rgbcdwyp])\[|(?!\\)(\]|\[)|([!@#$^])\[")
+
 	ignore = 0
 	passs  = 0
 	last   = False
