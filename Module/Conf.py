@@ -2,7 +2,7 @@
 #coding:utf-8
 
 import re
-from Args import Args
+
 from Echo import Echo
 from Hello import OS
 from Hello import Conf
@@ -30,6 +30,7 @@ def default():
 
 def run(argv):
 	import __main__
+	from Args import Args
 
 	args = Args.parse({
 		"desc": " Hello Shell 配置模块",

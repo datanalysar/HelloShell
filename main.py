@@ -15,10 +15,11 @@ $[Hello Shell] 个人脚本管理
   commands:
     $[new]                      新建脚本
     $[repo]                     配置仓库
-    $[back]                     恢复仓库
+    $[backup]                   备份仓库
     $[link]                     安装仓库中的脚本到系统环境变量中
     $[args] <file> [arguments]  解析参数为 shell 语法格式
     $[conf] <file> [options]    读写配置文件
+    $[alias] [name [= value]]   别名管理
     $[echo]                     格式化输出，支持接收由管道传入参数
 """.strip()
 
@@ -29,9 +30,9 @@ if __name__ == '__main__':
         from Module import Repo
         Repo.run(argv)
 
-    elif cmd == "back":
+    elif cmd == "backup":
         from Module import Repo
-        Repo.run(["--back"])
+        Repo.run(["--backup"])
 
     elif cmd == "new":
         from Module import Tmp 
@@ -40,6 +41,10 @@ if __name__ == '__main__':
     elif cmd == "link":
         from Module import Link 
         Link.run(argv)
+
+    elif cmd == "alias":
+        from Module import Alias 
+        Alias.run(argv)
         
     elif cmd == "args":
         from Module import Args

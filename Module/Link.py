@@ -2,34 +2,13 @@
 #coding:utf-8
 
 import os
-import Repo
+import Repo, Log
 from Echo import Echo
-from Args import Args
 from Hello import OS
-from Hello import Yaml
 
-_log      = None
-_log_file = OS.join(Repo._dir, ".helloshel")
 
 def log():
-	global _log
-	if not _log:
-		_log = Yaml.parse_file(_log_file)
-		if _log:
-			for i in range(len(_log)-1, -1, -1):
-				if not OS.exists(_log[i]["file"]):
-					del _log[i]
-		else:
-			_log = []
-	return _log
-
-def save(typ, file, link):
-	conf = log()
-	for i in range(len(conf)-1, -1, -1):
-		if conf[i].get("link") == link:
-			del conf[i]
-	conf.append({"type": typ, "file": file, "link": link})
-	OS.write(_log_file, Yaml.stringify(conf))
+	return Log.get("link")
 
 def exist(alias, target = None):
 	if type(alias) is dict:
@@ -41,19 +20,15 @@ def exist(alias, target = None):
 
 def search_link(target):
 	res = []
-	for item in log():
-		if item["type"] != "link":
-			continue
+	for item in Log.get("link"):
 		if exist(item) and (target == item["file"] or OS.issubpath(target, item["file"])):
 			res.append(item)
 	return res
 
 def find_link(target):
 	res = []
-	for item in log():
-		if item["type"] != "link":
-			continue
-		if target == item["file"] and exist(item):
+	for item in Log.get("link"):
+		if exist(item) and target == item["file"]:
 			res.append(item)
 	return res
 
@@ -72,7 +47,8 @@ def to_bin(file, alias):
 			if Echo.input('"@['+to+']" 以存在，是否替换 (y/n): ').lower() != "y":
 				exit(0)
 			OS.remove(to)
-		save("link", file, to)
+
+		Log.add_link( file, to)
 		os.symlink( file, to )		
 		Echo.echo("成功链接到 bin 目录: $["+ file + "] -> @[" + to + "]")
 		return to
@@ -129,11 +105,13 @@ def choice():
 
 
 def run(argv):
+	from Args import Args
+
 	args = Args.parse({
 		"desc": " 安装仓库中的脚本到系统环境变量中\n usage: helloshel link <script> [linkname]",
 		"options": [
-			["-l", "--list",   None,           "查看仓库内脚本"],
-			["-c", "--clear", None, "清理失效链接"]
+			["-l", "--list",   None, "查看仓库内脚本"],
+			["-c", "--clear", None,  "清理失效链接"]
 		]
 	}, argv, True, True)
 

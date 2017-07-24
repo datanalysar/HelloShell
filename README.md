@@ -213,9 +213,10 @@ $ echo "#b[abcd]" | helloshell
         - [x] python 模板支持
         - [ ] nodejs 模板支持
         - [ ] ruby     模板支持
-  - [ ] 支持 alias，
-        - [ ] 添加
-        - [ ] 还原
+  - [x] 支持 alias，
+        - [ ] 目前只读写 ~/.bash_profile
+        - [x] 添加
+        - [x] 还原
   - [ ] 备份仓库到 github
         - [x] master 分支，用户提交
         - [ ] history 分支，自动提交

@@ -4,7 +4,6 @@
 import os, re, sys, commands, time
 import Git, Conf
 from Echo import Echo
-from Args import Args
 from Hello import OS
  
 _dir = Conf.repo_dir()
@@ -112,7 +111,7 @@ def list_repo():
 			text += ' -> $[' + link+']'
 		Echo.echo(text)
 
-def back_repo(args):
+def update_repo(args):
 	git = Git.new(_dir)
 	(s, remote) = git.remote(name = 'hello_shell')
 	if s == 0:
@@ -133,7 +132,7 @@ def back_repo(args):
 			for item in ref:
 				Link.to_bin(item["file"], item["link"])
 
-def update_repo(args):
+def backup_repo(args):
 	git = Git.new(_dir)
 	(s, o, f) = git.status()
 	if s == 0 and len(f) > 0:
@@ -142,13 +141,15 @@ def update_repo(args):
 	git.echo().push("hello_shell")
 
 def run(argv):
+	from Args import Args
+
 	args = Args.parse({
 		"desc": " Hello Shell 配置仓库模块",
 		"options": [
 			["-d", "--dir",    "<file>",       "设置本地仓库路径"],
 			["-r", "--remote", "<github url>", "设置 github 仓库地址，例：[user]/[repo name]"],
-			["-b", "--back",   None,           "从 github 仓库更新到本地"],
-			["-u", "--update", None,           "备份仓库到 github"]
+			["-u", "--update",   None,         "从 github 仓库更新到本地"],
+			["-b", "--backup", None,           "备份仓库到 github"]
 		]
 	}, argv, True, True)
 	
@@ -165,10 +166,10 @@ def run(argv):
 	if args.get("remote"):
 		remote_repo(args.get("remote"))
 
-	if args.get("back"):
-		back_repo(args)
-
-	elif args.get("update"):
+	if args.get("update"):
 		update_repo(args)
+
+	elif args.get("backup"):
+		backup_repo(args)
 
 

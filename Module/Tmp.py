@@ -3,7 +3,6 @@
 
 import Link, Conf
 from Echo import Echo
-from Args import Args
 from Hello import OS
 
 bash_tmp = """
@@ -85,6 +84,8 @@ if __name__ == '__main__':
 """.lstrip()
 
 def run(argv):
+	from Args import Args
+	
 	args = Args.parse({
 		"desc": " Hello Shell 创建脚本",
 		"options": [
