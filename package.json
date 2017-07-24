@@ -11,5 +11,9 @@
 		"url": "https://github.com/wl879/HelloShell.git"
 	},
 
+	"bin"         : {
+		"helloshell" : "main.py"
+	},
+
 	"license": "MIT"
 }
